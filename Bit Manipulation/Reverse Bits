@@ -1,0 +1,31 @@
+/*
+Reverse the bits of an 32 bit unsigned integer A.
+*/
+
+/*
+Input Format:
+    First and only argument of input contains an integer A
+
+Output Format:
+    return a single unsigned integer.
+
+Constraints:
+0 <= A < 2^32
+*/
+
+
+
+unsigned int Solution::reverse(unsigned int A) {
+    int num=31;
+    int shift=1;
+    unsigned int ans=0;
+    while(num>=0)
+    {
+        int t=A&shift;
+        if(t!=0)
+            ans=ans+(pow(2,num));
+        num--;
+        shift=shift<<1;
+    }
+    return ans;
+}
