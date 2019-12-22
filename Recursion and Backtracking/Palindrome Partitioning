@@ -1,0 +1,60 @@
+/*
+Given a string s, partition s such that every string of the partition is a palindrome.
+Return all possible palindrome partitioning of s.
+*/
+
+/*
+For example, given s = "aab", Return
+  [
+    ["a","a","b"]
+    ["aa","b"],
+  ]
+*/
+
+
+
+int ispalindrome(string A,int start,int end)
+{
+    while(start<end)
+    {
+        if(A[start]!=A[end])
+            return 0;
+        start++;
+        end--;
+    }
+    return 1;
+}
+void addPartition(vector<vector<string>> &result,vector<string> &temp,string A,int start)
+{
+    if(start==A.size())
+    {
+        result.push_back(temp);
+        return;
+    }
+    for(int i=start;i<A.size();i++)
+    {
+        if(ispalindrome(A,start,i))
+        {
+            string s="";
+            for(int j=start;j<=i;j++)
+            {
+                s=s+A[j];
+            }
+            temp.push_back(s);
+            addPartition(result,temp,A,i+1);
+            temp.pop_back();
+            
+        }
+    }
+}
+vector<vector<string> > Solution::partition(string A) {
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+    vector<vector<string>> result;
+    vector<string> temp;
+    int start=0;
+    addPartition(result,temp,A,start);
+    return result;
+}
