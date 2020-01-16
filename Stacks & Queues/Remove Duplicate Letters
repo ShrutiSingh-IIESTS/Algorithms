@@ -1,0 +1,72 @@
+/*
+Given a string A consisting of lowercase English alphabets. Find and return lexicographically smallest string B after removing duplicate letters from A so that every letter appears once and only once.
+*/
+
+/* 
+Input Format
+The only argument given is string A.
+Output Format
+Return lexicographically smallest string B after removing duplicate letters from A.
+Constraints
+1 <= length of the string <= 200000
+A consists of lowercase English alphabets only. 
+For Example
+Input 1:
+    A = "cbacdcbc"
+Output 1:
+    B = "acdb"
+
+Input 2:
+    A = "bcabc"
+Output 2:
+    B = "abc"
+*/
+
+
+string Solution::solve(string A) {
+    stack<char> s;
+    int n=A.length();
+    unordered_map<char,int> um;
+    for(int i=0;i<n;i++)
+    {
+        um[A[i]]++;
+    }
+    unordered_map<char,bool> bm;
+    for(int i=0;i<n;i++)
+    {
+        if(bm[A[i]]==true)
+        {
+            um[A[i]]--;
+            continue;
+        }
+        if(s.empty())
+        {
+            s.push(A[i]);
+            um[A[i]]--;
+        }
+        else if(A[i]>s.top())
+        {
+            s.push(A[i]);
+            um[A[i]]--;
+        }
+        else
+        {
+            while(!s.empty()&&s.top()>=A[i]&&um[s.top()]>0)
+            {
+                char ch=s.top();
+                s.pop();
+                bm[ch]=false;
+            }
+            s.push(A[i]);
+            um[A[i]]--;
+        }
+        bm[A[i]]=true;
+    }
+    string ans="";
+    while(!s.empty())
+    {
+        ans=s.top()+ans;
+        s.pop();
+    }
+    return ans;
+}

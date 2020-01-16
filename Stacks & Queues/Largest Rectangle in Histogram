@@ -1,0 +1,99 @@
+/*
+Given an array of integers A of size N. A represents a histogram i.e A[i] denotes height of the ith histogram's bar. Width of each bar is 1.
+*/
+
+/*
+Input Format
+The only argument given is the integer array A.
+Output Format
+Return the area of largest rectangle in the histogram.
+For Example
+Input 1:
+    A = [2, 1, 5, 6, 2, 3]
+Output 1:
+    10
+    Explanation 1:
+        The largest rectangle is shown in the shaded area, which has area = 10 unit.
+*/
+
+
+void findLeft_small(vector<int> &A,vector<int> &l_small,int n)
+{
+    stack<int> s;
+    for(int i=n-1;i>=0;i--)
+    {
+        if(s.empty())
+        {
+            s.push(i);
+        }
+        else if(A[i]>=A[s.top()])
+        {
+            s.push(i);
+        }
+        else
+        {
+            while(!s.empty()&&A[s.top()]>A[i])
+            {
+                int ind=s.top();
+                l_small[ind]=i;
+                s.pop();
+            }
+            s.push(i);
+        }
+    }
+    while(!s.empty())
+    {
+        int ind=s.top();
+        l_small[ind]=-1;
+        s.pop();
+    }
+}
+
+void findRight_small(vector<int> &A,vector<int> &r_small,int n)
+{
+    stack<int> s;
+    for(int i=0;i<n;i++)
+    {
+        if(s.empty())
+        {
+            s.push(i);
+        }
+        else if(A[i]>=A[s.top()])
+        {
+            s.push(i);
+        }
+        else
+        {
+            while(!s.empty()&&A[s.top()]>A[i])
+            {
+                int ind=s.top();
+                r_small[ind]=i;
+                s.pop();
+            }
+            s.push(i);
+        }
+    }
+    while(!s.empty())
+    {
+        int ind=s.top();
+        r_small[ind]=n;
+        s.pop();
+    }
+}
+
+int Solution::largestRectangleArea(vector<int> &A) {
+    int n=A.size();
+    vector<int> l_small(n);
+    vector<int> r_small(n);
+    findLeft_small(A,l_small,n);
+    findRight_small(A,r_small,n);
+    int ans=0;
+    for(int i=0;i<n;i++)
+    {
+        int width=r_small[i]-l_small[i]-1;
+        int area=A[i]*width;
+        if(area>ans)
+            ans=area;
+    }
+    return ans;
+}

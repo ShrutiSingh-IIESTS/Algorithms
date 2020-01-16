@@ -1,0 +1,48 @@
+/*
+Sort stack using another stack
+*/
+
+/*
+Input Format
+The only argument given is the integer array A.
+Output Format
+Return the array of integers after sorting the stack using another stack.
+Constraints
+1 <= length of the array <= 5000
+0 <= A[i] <= 10^9 
+*/
+
+
+void sortStack(vector<int> &A,int n)
+{
+    if(n==0)
+        return;
+    int ele=A.back();
+    A.pop_back();
+    sortStack(A,n-1);
+    if(n==1)
+    {
+        A.push_back(ele);
+    }
+    else
+    {
+        stack<int> s;
+        while(!A.empty()&&ele<A.back())
+        {
+            s.push(A.back());
+            A.pop_back();
+        }
+        A.push_back(ele);
+        while(!s.empty())
+        {
+            A.push_back(s.top());
+            s.pop();
+        }
+    }
+}
+
+vector<int> Solution::solve(vector<int> &A) {
+    int n=A.size();
+    sortStack(A,n);
+    return A;
+}
